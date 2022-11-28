@@ -1,3 +1,2 @@
-# seiji1997.github.io
+# Learning algorithm
 
-this repository show my information.
