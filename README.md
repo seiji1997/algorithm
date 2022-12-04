@@ -11,5 +11,5 @@ I will learn Algorithm and Coding for Interview to get a job.
 - 5 [CRAKING the CODING INTERVIWE with PYTHON](https://github.com/seiji1997/algorithm/blob/master/CRAKING%20the%20CODING%20INTERVIWE/README.md)
 
 ## **Goal in 2023**
-- AtCoder：水色
+- AtCoder：水色 = top 30% at AtCoder
 - CODING INTERVIWE for getting a JOB.
