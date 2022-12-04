@@ -13,5 +13,4 @@ I will learn Algorithm and Coding for Interview to get a job.
 
 ## **Goal in 2023**
 - AtCoder：水色
-- CRAKING the CODING INTERVIWE<br>
-[https://www.amazon.co.jp/-/en/Gayle-Laakmann-McDowell/dp/0984782850](https://www.amazon.co.jp/-/en/Gayle-Laakmann-McDowell/dp/0984782850)
+- CODING INTERVIWE for getting a JOB.
