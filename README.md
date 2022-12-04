@@ -1,8 +1,7 @@
 # Learning algorithm
 I will learn Algorithm and Coding for Interview to get a job.
 
-### **Competitive programming**
-- AtCoder([https://atcoder.jp/](https://atcoder.jp/))
+## **Competitive programming**
 
 ### study plan
 - [アルゴリズム的思考力が身につく！ プログラミングコンテストAtCoder入門](https://github.com/seiji1997/algorithm/tree/master/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88AtCoder%E5%85%A5%E9%96%80)
