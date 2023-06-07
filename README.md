@@ -12,4 +12,5 @@ I will learn Algorithm and Coding for Interview to get a job.
 
 ## **Goal in 2023**
 - AtCoder：水色 = top 30% in AtCoder
+- アルゴリズム実技検定: https://past.atcoder.jp/
 - CODING INTERVIWE for getting a JOB.
