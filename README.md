@@ -13,7 +13,7 @@ I will learn Algorithm and Coding for Interview to get a job.
 - 6 [Master the Coding Interview: Big Tech (FAANG) Interviews](https://www.udemy.com/course/master-the-coding-interview-big-tech-faang-interviews/)
 - 7 [CRAKING the CODING INTERVIWE with PYTHON](https://github.com/seiji1997/algorithm/blob/master/CRAKING%20the%20CODING%20INTERVIWE/README.md)
 
-## **Goal in 2023**
+## **Goal in 2024**
 - AtCoder：水色 = top 30% in AtCoder
 - アルゴリズム実技検定: https://past.atcoder.jp/
-- CODING INTERVIWE for getting a JOB.
+- CODING INTERVIWE for getting a JOB in Australia.
