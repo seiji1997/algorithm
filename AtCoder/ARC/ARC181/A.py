@@ -6,6 +6,7 @@
 操作回数の計算方針: 
 - 各順列がすでにソートされているかをチェック(順列を順番に見ていき、連続する部分が順序通りかどうかを確認)
   - ソートされている場合: 操作不要のため0を記録
+  - P[0] is N and P[-1] is 1は3回のsortが必要
   - ソートされていない場合: 順序が乱れている最初と最後のインデックスを特定し、その範囲がソートされているかを確認
     - 乱れた部分が一つのブロックであれば、1回の操作でソート可能
     - それ以外の場合は、2回の操作でソート可能
@@ -18,15 +19,15 @@ import sys
 def input():
     return sys.stdin.readline().strip()
 
-def is_already_sorted(P, N):
+def is_sorted(P, N):
     """Check if the permutation is already sorted."""
     return P == list(range(1, N + 1))
 
-def is_special_case(P, N):
+def three_sort(P, N):
     """Check if the permutation is the special case where P[0] is N and P[-1] is 1."""
     return P[0] == N and P[-1] == 1
 
-def can_sort_in_one_operation(P, N):
+def one_sort(P, N):
     """Determine if the permutation can be sorted with a single operation."""
     max_value_seen = 0
     for i in range(N):
@@ -36,12 +37,12 @@ def can_sort_in_one_operation(P, N):
             max_value_seen = P[i]
     return False
 
-def calculate_min_operations(N, P):
-    if is_special_case(P, N):
+def calculate_sort(N, P):
+    if three_sort(P, N):
         return 3
-    if is_already_sorted(P, N):
+    if is_sorted(P, N):
         return 0
-    if can_sort_in_one_operation(P, N):
+    if one_sort(P, N):
         return 1
     return 2
 
@@ -50,54 +51,31 @@ def main():
     for _ in range(T):
         N = int(input())
         P = list(map(int, input().split()))
-        print(calculate_min_operations(N, P))
+        print(calculate_sort(N, P))
 
 if __name__ == "__main__":
     main()
 
 # -----------------------------------------------------------------------------------
-# AC 173ms, 32296KB
-def calculate_min_operations(N, A):
-    # Create a list to mark misplacements
-    misplacements = [1 if A[i] != i + 1 else 0 for i in range(N)]
-    
-    if sum(misplacements) == 0:
-        # The array is already sorted
-        return 0
-    elif A[0] == N and A[-1] == 1:
-        # Edge case where first element is N and last element is 1
-        return 3
-    elif misplacements[0] == 0 or misplacements[-1] == 0:
-        # At least one end is already sorted
-        return 1
+# 提出用
+import sys
+input = sys.stdin.readline
+
+T = int(input())
+for _ in range(T):
+    N = int(input())
+    P = list(map(int, input().split()))
+    if P[0] == N and P[-1] == 1:
+        print(3)
+    elif P == list(range(1, N + 1)):
+        print(0)
     else:
-        # Check if there is a continuous sorted segment
-        for i in range(1, N):
-            if misplacements[i] == 0:
-                if all(A[j] <= i + 1 for j in range(i)):
-                    return 1
-        return 2
-
-def main():
-    import sys
-    input = sys.stdin.read
-    data = input().split()
-
-    index = 0
-    T = int(data[index])
-    index += 1
-
-    results = []
-    for _ in range(T):
-        N = int(data[index])
-        index += 1
-        A = list(map(int, data[index:index + N]))
-        index += N
-
-        results.append(calculate_min_operations(N, A))
-
-    for result in results:
-        print(result)
-
-if __name__ == "__main__":
-    main()
+        m = 0
+        for i in range(N):
+            if P[i] == i + 1 and m < i + 1:
+                print(1)
+                break
+            if P[i] > m:
+                m = P[i]
+        else:
+            print(2)
