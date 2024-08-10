@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 # This is the main.py for problem C in ABC366
-def main():
-    pass  # Add your solution logic here
+import sys
+from ball_counter import process_queries
 
-if __name__ == '__main__':
+def main():
+    input = sys.stdin.read
+    data = input().splitlines()
+    queries = data[1:] 
+    results = process_queries(queries)
+    sys.stdout.write("\n".join(results) + "\n")
+
+if __name__ == "__main__":
     main()

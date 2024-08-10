@@ -1,4 +1,3 @@
-import sys
 from collections import defaultdict
 
 def one(ball_count, x):
@@ -37,9 +36,3 @@ def process_queries(queries):
             results.append(str(result))
     
     return results
-
-input = sys.stdin.read
-data = input().splitlines()
-queries = data[1:] 
-results = process_queries(queries)
-sys.stdout.write("\n".join(results) + "\n")
