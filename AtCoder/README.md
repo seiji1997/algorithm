@@ -67,3 +67,109 @@ The condition for becoming gray is simply participating in AtCoder once.<br>
 Therefore, AtCoder does not guarantee any skill level at this rank. If you're gray, please participate in more contests and work on improving your skills.<br>
 If your rating is above 200, you would rank quite high on other sites. We are considering setting up a system on AtCoderJobs to evaluate skills.
 
+##### 20min~1hで解きたい
+https://atcoder.jp/contests/aising2019/tasks/aising2019_c
+
+```python
+from sys import setrecursionlimit
+from collections import defaultdict
+
+# Set recursion limit to handle deep recursion
+setrecursionlimit(10**6)
+
+# Input reading
+H, W = map(int, input().split())
+grid = [input() for _ in range(H)]
+
+# Directions for moving (down, up, right, left)
+directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+# Visited flag
+visited = [[False] * W for _ in range(H)]
+
+# DFS to count connected components
+def dfs(x, y):
+    visited[y][x] = True
+    black, white = 0, 0
+    stack = [(x, y)]
+
+    # Count initial cell
+    if grid[y][x] == "#":
+        black += 1
+    else:
+        white += 1
+
+    while stack:
+        cx, cy = stack.pop()
+
+        for dx, dy in directions:
+            nx, ny = cx + dx, cy + dy
+
+            # Check bounds and if the cell is unvisited and alternating in color
+            if 0 <= nx < W and 0 <= ny < H and not visited[ny][nx]:
+                if grid[ny][nx] != grid[cy][cx]:
+                    visited[ny][nx] = True
+                    stack.append((nx, ny))
+                    if grid[ny][nx] == "#":
+                        black += 1
+                    else:
+                        white += 1
+
+    return black, white
+
+# Calculate the answer
+ans = 0
+for y in range(H):
+    for x in range(W):
+        if not visited[y][x]:
+            b, w = dfs(x, y)
+            ans += b * w
+
+print(ans)
+```
+
+
+
+##### 1h で解きたい
+https://atcoder.jp/contests/arc100/tasks/arc100_b
+
+```python
+from bisect import bisect_left
+from itertools import accumulate
+
+def solve_problem(n, A):
+    A = [0] + A  # Prefix sum array
+    for i in range(n):
+        A[i + 1] += A[i]
+    
+    ans = float('inf')  # Initialize with infinity
+
+    for i in range(2, n - 1):
+        x = []
+
+        # Determine the best left split
+        l = bisect_left(A, A[i] // 2)
+        if A[l] - A[0] < A[i] - A[l - 1]:
+            x += [A[l] - A[0], A[i] - A[l]]
+        else:
+            x += [A[l - 1] - A[0], A[i] - A[l - 1]]
+
+        # Determine the best right split
+        r = bisect_left(A, A[i] + (A[n] - A[i]) // 2)
+        if A[r] - A[i] < A[n] - A[r - 1]:
+            x += [A[r] - A[i], A[n] - A[r]]
+        else:
+            x += [A[r - 1] - A[i], A[n] - A[r - 1]]
+        
+        # Update the answer with the minimal difference
+        ans = min(ans, max(x) - min(x))
+    
+    return ans
+
+# Input
+n = int(input())
+A = list(map(int, input().split()))
+
+# Output the result
+print(solve_problem(n, A))
+```
