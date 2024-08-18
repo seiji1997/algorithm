@@ -1,8 +1,13 @@
 # Learning algorithm
-I will learn Algorithm and Coding for Interview to get a job.
+I will learn the algorithm and Coding for the interview to get a job.
 
 ### **Competitive programming**
-- AtCoder([https://atcoder.jp/](https://atcoder.jp/))
+- AtCoder([https://atcoder.jp/](https://atcoder.jp/))`
+  - 1, C++入門 AtCoder Programming Guide for beginners (APG4b)
+  - 2, Python入門 AtCoder Programming Guide for beginners (APG4bPython)
+  - 3, AtCoder Beginners Selection
+  - 4, 競プロ典型 90 問
+
 
 ### study plan
 - [アルゴリズム実技検定公式テキスト](https://www.amazon.co.jp/-/en/%E5%B2%A9%E4%B8%8B-%E7%9C%9F%E4%B9%9F-ebook/dp/B08QRNJ7M3/ref=sr_1_1?crid=1RBHM3KIIGDST&keywords=%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0%E5%AE%9F%E6%8A%80%E6%A4%9C%E5%AE%9A%E5%85%AC%E5%BC%8F%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88&qid=1669861101&qu=eyJxc2MiOiIwLjg2IiwicXNhIjoiMC40OSIsInFzcCI6IjAuNzYifQ%3D%3D&sprefix=python+%E3%81%A7%E5%AD%A6%E3%81%B6%E5%AE%9F%E8%A1%8C%E3%81%AE%E6%95%99%E7%A7%91%E6%9B%B8%2Caps%2C150&sr=8-1)
@@ -44,7 +49,7 @@ I will learn Algorithm and Coding for Interview to get a job.
   - **復習**: 週末に今週解いた問題を再度解く。
 
 ##### 4. **月次レビュー**
-- **レーティングの確認**: 毎月末に現在のレーティングを確認。
+- **レーティングの確認**: 毎月末に現在のレーティング/パフォーマンスを確認。
 - **達成度の確認**: 目標に対する進捗を確認し、計画を調整。
 
 ##### 5. **追加リソース**
@@ -56,10 +61,6 @@ I will learn Algorithm and Coding for Interview to get a job.
 
 - **オンラインジャッジ**: AtCoder、LeetCode、Codeforces、HackerRank
 
-- **書籍**:
-  - 『プログラミングコンテストチャレンジブック』
-  - 『アルゴリズム図鑑』
-
 ---
 
 - **アルゴリズム実技検定**
@@ -67,7 +68,7 @@ I will learn Algorithm and Coding for Interview to get a job.
   - 過去問を解き、解答例を見ながら学習を進める。
 
 - **CODING INTERVIWE for getting a JOB in Australia**
-  - オーストラリアでの就職を目指し、コーディングインタビュー対策を行う。
+  - オーストラリア・カナダでの就職を目指し、コーディングインタビュー対策を行う。
   - **使用教材**:
     - LeetCode、HackerRankでのコーディング問題集
     - 『Cracking the Coding Interview』
