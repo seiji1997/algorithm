@@ -274,3 +274,258 @@ def test_load_parquet_wrongtype(mocker, mock_loader):
     mocker.patch("polars.read_parquet", side_effect=side_effect_parquet_ng)
     df_actual = mock_loader.load_fbc_parquet(Path("fake.parquet"))
     assert not df_actual.frame_equal(df_expected_quotation_parquet, null_equal=True)
+    
+    
+    
+# test refactor 
+
+import pytest
+import polars as pl
+from pathlib import Path
+from io import StringIO, BytesIO
+
+from loader import Loader
+
+@pytest.fixture
+def mock_loader():
+    """
+    Loader(config=None) を返す。
+    """
+    return Loader()
+
+# -------------------------------
+# CSV テスト: load_quotation_csv
+# -------------------------------
+
+def test_load_quotation_csv_normal(mocker, mock_loader):
+    """
+    CSV 正常系:
+     - path.exists => True
+     - polars.read_csv => 正しい列/型 => frame_equal => True
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    csv_normal = """\
+ID,testid,exam_number,buddy,force_refresh,tracking_marker,read_crinkle,stapler_time,tape,tape_temp,ink_cycle
+1,10,999,0,168,0.1,0.2,40,"3mon",62,1250
+2,11,888,1,120,0.15,0.25,40,"3mon",62,1500
+"""
+
+    def side_effect_csv_ok(path, *args, **kwargs):
+        return pl.read_csv(StringIO(csv_normal), **kwargs)
+
+    mocker.patch("polars.read_csv", side_effect=side_effect_csv_ok)
+
+    df_actual = mock_loader.load_quotation_csv()
+
+    df_expected = pl.DataFrame({
+        "ID": [1,2],
+        "testid": [10,11],
+        "exam_number":[999,888],
+        "buddy":[0,1],
+        "force_refresh":[168,120],
+        "tracking_marker":[0.1,0.15],
+        "read_crinkle":[0.2,0.25],
+        "stapler_time":[40,40],
+        "tape":["3mon","3mon"],
+        "tape_temp":[62,62],
+        "ink_cycle":[1250,1500],
+    })
+    assert df_actual.frame_equal(df_expected, null_equal=True)
+
+def test_load_quotation_csv_missing_col(mocker, mock_loader):
+    """
+    CSV 異常系: カラムが足りない => frame_equal => False
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    csv_missing = """\
+ID,testid,exam_number,buddy,force_refresh,tracking_marker,read_crinkle,stapler_time,tape,ink_cycle
+1,10,999,0,168,0.1,0.2,40,"3mon",1250
+2,11,888,1,120,0.15,0.25,40,"3mon",1500
+"""
+
+    def side_effect_csv_missing(path, *args, **kwargs):
+        return pl.read_csv(StringIO(csv_missing), **kwargs)
+
+    mocker.patch("polars.read_csv", side_effect=side_effect_csv_missing)
+    df_actual = mock_loader.load_quotation_csv()
+
+    df_expected = pl.DataFrame({
+        "ID": [1,2],
+        "testid":[10,11],
+        "exam_number":[999,888],
+        "buddy":[0,1],
+        "force_refresh":[168,120],
+        "tracking_marker":[0.1,0.15],
+        "read_crinkle":[0.2,0.25],
+        "stapler_time":[40,40],
+        "tape":["3mon","3mon"],
+        "tape_temp":[62,62],
+        "ink_cycle":[1250,1500],
+    })
+    assert not df_actual.frame_equal(df_expected, null_equal=True)
+
+def test_load_quotation_csv_wrong_type(mocker, mock_loader):
+    """
+    CSV 異常系: 型不正 => frame_equal => False
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    csv_wrong = """\
+ID,testid,exam_number,buddy,force_refresh,tracking_marker,read_crinkle,stapler_time,tape,tape_temp,ink_cycle
+1,10,999,0,168,0.1,"abc",40,"3mon",62,1250
+"""
+
+    def side_effect_csv_wrong(path, *args, **kwargs):
+        return pl.read_csv(StringIO(csv_wrong), **kwargs)
+
+    mocker.patch("polars.read_csv", side_effect=side_effect_csv_wrong)
+    df_actual = mock_loader.load_quotation_csv()
+
+    df_expected = pl.DataFrame({
+        "ID": [1,2],
+        "testid":[10,11],
+        "exam_number":[999,888],
+        "buddy":[0,1],
+        "force_refresh":[168,120],
+        "tracking_marker":[0.1,0.15],
+        "read_crinkle":[0.2,0.25],
+        "stapler_time":[40,40],
+        "tape":["3mon","3mon"],
+        "tape_temp":[62,62],
+        "ink_cycle":[1250,1500],
+    })
+    assert not df_actual.frame_equal(df_expected, null_equal=True)
+
+def test_load_quotation_csv_extra_col(mocker, mock_loader):
+    """
+    CSV 異常系: 余分カラム => frame_equal => False
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    csv_extra = """\
+ID,testid,exam_number,buddy,force_refresh,tracking_marker,read_crinkle,stapler_time,tape,tape_temp,ink_cycle,extra_col
+1,10,999,0,168,0.1,0.2,40,"3mon",62,1250,"xyz"
+2,11,888,1,120,0.15,0.25,40,"3mon",62,1500,"xyz"
+"""
+
+    def side_effect_csv_extra(path, *args, **kwargs):
+        return pl.read_csv(StringIO(csv_extra), **kwargs)
+
+    mocker.patch("polars.read_csv", side_effect=side_effect_csv_extra)
+    df_actual = mock_loader.load_quotation_csv()
+
+    df_expected = pl.DataFrame({
+        "ID":[1,2],
+        "testid":[10,11],
+        "exam_number":[999,888],
+        "buddy":[0,1],
+        "force_refresh":[168,120],
+        "tracking_marker":[0.1,0.15],
+        "read_crinkle":[0.2,0.25],
+        "stapler_time":[40,40],
+        "tape":["3mon","3mon"],
+        "tape_temp":[62,62],
+        "ink_cycle":[1250,1500],
+    })
+    assert not df_actual.frame_equal(df_expected, null_equal=True)
+
+def test_load_quotation_csv_file_notfound(mocker, mock_loader):
+    """
+    ファイル無 => FileNotFoundError
+    """
+    mocker.patch.object(Path, "exists", return_value=False)
+    with pytest.raises(FileNotFoundError):
+        mock_loader.load_quotation_csv()
+
+# -------------------------------
+# Parquet テスト: load_fbc_parquet
+# -------------------------------
+
+def test_load_fbc_parquet_normal(mocker, mock_loader):
+    """
+    Parquet 正常 => path.exists=>True => read_parquet => frame_equal=>True
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    def side_effect_parquet_ok(path, *args, **kwargs):
+        df = pl.DataFrame({
+            "ID": [1,2],
+            "testid":[10,11],
+            "exam_number":[999,888],
+            "buddy":[0,1],
+            "force_refresh":[168,120],
+            "tracking_marker":[0.1,0.15],
+            "read_crinkle":[0.2,0.25],
+            "stapler_time":[40,40],
+            "tape":["3mon","3mon"],
+            "tape_temp":[62,62],
+            "ink_cycle":[1250,1500],
+        })
+        return df
+
+    mocker.patch("polars.read_parquet", side_effect=side_effect_parquet_ok)
+    df_actual = mock_loader.load_fbc_parquet(Path("fake.parquet"))
+
+    df_expected = pl.DataFrame({
+        "ID":[1,2],
+        "testid":[10,11],
+        "exam_number":[999,888],
+        "buddy":[0,1],
+        "force_refresh":[168,120],
+        "tracking_marker":[0.1,0.15],
+        "read_crinkle":[0.2,0.25],
+        "stapler_time":[40,40],
+        "tape":["3mon","3mon"],
+        "tape_temp":[62,62],
+        "ink_cycle":[1250,1500],
+    })
+    assert df_actual.frame_equal(df_expected, null_equal=True)
+
+def test_load_fbc_parquet_file_notfound(mocker, mock_loader):
+    """
+    ファイル不存在 => FileNotFoundError
+    """
+    mocker.patch.object(Path, "exists", return_value=False)
+    with pytest.raises(FileNotFoundError):
+        mock_loader.load_fbc_parquet(Path("nofile.parquet"))
+
+def test_load_fbc_parquet_wrong_data(mocker, mock_loader):
+    """
+    Parquet 異常データ => frame_equal=>False
+    例: read_crinkle="abc"
+    """
+    mocker.patch.object(Path, "exists", return_value=True)
+
+    def side_effect_parquet_wrong(path, *args, **kwargs):
+        df = pl.DataFrame({
+            "ID":[1],
+            "testid":[10],
+            "buddy":[0],
+            "force_refresh":[168],
+            "tracking_marker":[0.1],
+            "read_crinkle":["abc"], 
+            "stapler_time":[40],
+            "tape":["3mon"],
+            "tape_temp":[62],
+            "ink_cycle":[1250],
+        })
+        return df
+
+    mocker.patch("polars.read_parquet", side_effect=side_effect_parquet_wrong)
+    df_actual = mock_loader.load_fbc_parquet(Path("fake.parquet"))
+
+    df_expected = pl.DataFrame({
+        "ID":[1],
+        "testid":[10],
+        "buddy":[0],
+        "force_refresh":[168],
+        "tracking_marker":[0.1],
+        "read_crinkle":[0.2],
+        "stapler_time":[40],
+        "tape":["3mon"],
+        "tape_temp":[62],
+        "ink_cycle":[1250],
+    })
+    assert not df_actual.frame_equal(df_expected, null_equal=True)
